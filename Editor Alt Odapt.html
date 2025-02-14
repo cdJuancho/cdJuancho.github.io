@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liberté - Podcast sobre la Revolución Francesa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #002654;
+            --secondary-color: #ED2939;
+            --accent-color: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            color: var(--accent-color) !important;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('https://images.unsplash.com/photo-1549893072-4bc678117f45?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .episode-card {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 30px;
+            perspective: 2000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-inner:hover {
+            transform: translateZ(10px);
+        }
+
+        .card-inner.flipped {
+            transform: rotateY(180deg) translateZ(0);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .episode-card:hover .card-front,
+        .episode-card:hover .card-back {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .card-front {
+            background-color: white;
+            transform: rotateY(0deg);
+        }
+
+        .card-back {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .episode-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .episode-number {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .duration-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .play-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .play-button:hover {
+            background-color: #c41e30;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--secondary-color);
+        }
+
+        .subscribe-section {
+            background-color: #f1f1f1;
+            padding: 3rem 0;
+            margin: 2rem 0;
+        }
+
+        .platform-button {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .platform-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Liberté</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#episodes">Episodios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#about">Sobre Nosotros</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 mb-4">La Revolución Francesa</h1>
+            <p class="lead mb-4">Un viaje histórico a través de los eventos que cambiaron Francia y el mundo</p>
+            <button class="play-button">
+                <i class="fas fa-play me-2"></i>Escuchar Último Episodio
+            </button>
+        </div>
+    </section>
+
+    <section class="subscribe-section">
+        <div class="container text-center">
+            <h3 class="mb-4">Escúchanos en tu plataforma favorita</h3>
+            <div>
+                <button class="platform-button">
+                    <i class="fab fa-spotify me-2"></i>Spotify
+                </button>
+                <button class="platform-button">
+                    <i class="fab fa-apple me-2"></i>Apple Podcasts
+                </button>
+                <button class="platform-button">
+                    <i class="fab fa-google me-2"></i>Google Podcasts
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container" id="episodes">
+        <h2 class="text-center mb-5">Episodios</h2>
+        <div class="row" id="episodes-container">
+            <!-- Las tarjetas de episodios se generarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        // Datos de los episodios
+        const episodesData = [
+            {
+                number: 1,
+                title: "Los Orígenes de la Revolución",
+                imageUrl: "https://images.unsplash.com/photo-1549893072-4bc678117f45",
+                imageAlt: "Versalles",
+                duration: "45 minutos",
+                description: "Explora las causas profundas que llevaron a la Revolución Francesa: la crisis financiera, el sistema de privilegios del Antiguo Régimen, el descontento social y las nuevas ideas de la Ilustración. Descubre cómo la sociedad francesa llegó a su punto de quiebre.",
+                audioUrl: "#"
+            },
+            {
+                number: 2,
+                title: "La Toma de la Bastilla",
+                imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
+                imageAlt: "La Bastilla",
+                duration: "50 minutos",
+                description: "El 14 de julio de 1789, el pueblo de París asaltó la prisión de la Bastilla, símbolo del poder absoluto. Este episodio narra hora por hora los eventos de este día crucial que marcó el inicio de la Revolución Francesa.",
+                audioUrl: "#"
+            },
+            {
+                number: 3,
+                title: "El Reino del Terror",
+                imageUrl: "https://images.unsplash.com/photo-1548248823-ce16a73b6d49",
+                imageAlt: "El Terror",
+                duration: "55 minutos",
+                description: "Adéntrate en el período más oscuro de la Revolución. Descubre cómo Robespierre y el Comité de Salvación Pública instauraron un régimen de terror que acabaría devorando a sus propios arquitectos.",
+                audioUrl: "#"
+            },
+            {
+                number: 4,
+                title: "El Directorio",
+                imageUrl: "https://images.unsplash.com/photo-1551462147-ff29053bfc14",
+                imageAlt: "El Directorio",
+                duration: "48 minutos",
+                description: "Tras el Terror, Francia busca estabilidad bajo un nuevo sistema de gobierno. Este episodio explora los desafíos y contradicciones del Directorio, y cómo preparó el terreno para el ascenso de Napoleón.",
+                audioUrl: "#"
+            },
+            {
+                number: 5,
+                title: "El Ascenso de Napoleón",
+                imageUrl: "https://images.unsplash.com/photo-1552760291-16b8ebe0c348",
+                imageAlt: "Napoleón",
+                duration: "52 minutos",
+                description: "El capítulo final explora cómo un joven oficial corso se convirtió en el líder de Francia. Desde el 18 Brumario hasta su coronación como emperador, descubre cómo Napoleón transformó los ideales revolucionarios.",
+                audioUrl: "#"
+            },
+            {
+                number: 6,
+                title: "El Legado Revolucionario",
+                imageUrl: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a",
+                imageAlt: "Legado de la Revolución",
+                duration: "58 minutos",
+                description: "Analizamos el impacto duradero de la Revolución Francesa en el mundo moderno: desde los derechos humanos y la democracia hasta el nacionalismo y las revoluciones posteriores. Descubre cómo los ideales de Libertad, Igualdad y Fraternidad continúan resonando en la actualidad.",
+                audioUrl: "#"
+            }
+        ];
+
+        // Función para generar el HTML de una tarjeta de episodio
+        function createEpisodeCard(episode) {
+            return `
+                <div class="col-md-6 col-lg-4">
+                    <div class="episode-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="${episode.imageUrl}" class="episode-image" alt="${episode.imageAlt}">
+                                <div class="card-content">
+                                    <span class="episode-number">Episodio ${episode.number}</span>
+                                    <div class="title-container">
+                                        <h5 class="card-title">${episode.title}</h5>
+                                        <span class="duration-badge">${episode.duration}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <h5>${episode.title}</h5>
+                                <p class="mt-3">${episode.description}</p>
+                                <button class="play-button mt-3" data-audio-url="${episode.audioUrl}">
+                                    <i class="fas fa-play me-2"></i>Escuchar Ahora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generar todas las tarjetas de episodios
+        const episodesContainer = document.getElementById('episodes-container');
+        episodesContainer.innerHTML = episodesData.map(createEpisodeCard).join('');
+
+        // Inicializar los event listeners después de que el contenido esté en el DOM
+        function initializeEventListeners() {
+            // Event listeners para las tarjetas
+            document.querySelectorAll('.episode-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const cardInner = this.querySelector('.card-inner');
+                    if (cardInner) {
+                        cardInner.classList.toggle('flipped');
+                    }
+                });
+            });
+
+            // Event listeners para los botones de reproducción
+            document.querySelectorAll('.play-button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Evita que el clic en el botón active el giro de la tarjeta
+                    const audioUrl = this.getAttribute('data-audio-url');
+                    this.innerHTML = '<i class="fas fa-pause me-2"></i>Pausar';
+                    console.log('Reproduciendo audio:', audioUrl);
+                });
+            });
+        }
+
+        // Inicializar los event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+        });
+    </script>
+
+    <section id="about" class="container my-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto text-center">
+                <h2 class="mb-4">Sobre el Podcast</h2>
+                <p class="lead">
+                    Liberté es un podcast que explora en profundidad uno de los acontecimientos más importantes de la historia moderna: la Revolución Francesa. A través de seis episodios cuidadosamente producidos, analizamos los eventos, personajes y consecuencias que transformaron no solo Francia, sino el mundo entero.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container text-center">
+            <div class="social-icons mb-3">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+            <p>&copy; 2024 Liberté Podcast. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
